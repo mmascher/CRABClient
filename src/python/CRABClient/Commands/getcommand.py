@@ -41,8 +41,8 @@ class getcommand(SubCommand):
             self.logger.info("Setting the destination to %s " % self.dest )
 
         #Retrieving output files location from the server
-        self.logger.debug('Retrieving locations for task %s' % self.cachedinfo['RequestName'] )
-        inputlist =  [ ('workflow', self.cachedinfo['RequestName']) ]
+        self.logger.debug('Retrieving locations for task %s' % self.requestname )
+        inputlist =  [ ('workflow', self.requestname) ]
         inputlist.extend(list(argv.iteritems()))
         if getattr(self.options, 'quantity', None):
             self.logger.debug('Retrieving %s file locations' % self.options.quantity )

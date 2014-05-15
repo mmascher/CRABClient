@@ -57,16 +57,16 @@ class status(SubCommand):
     def __call__(self):
         server = HTTPRequests(self.serverurl, self.proxyfilename, self.proxyfilename, version=__version__)
 
-        self.logger.debug('Looking up detailed status of task %s' % self.cachedinfo['RequestName'])
-        user = self.cachedinfo['RequestName'].split("_")[2].split(":")[-1]
+        self.logger.debug('Looking up detailed status of task %s' % self.requestname)
+        user = self.requestname.split("_")[2].split(":")[-1]
         verbose = int(self.summary or self.long or self.json)
         if self.idle:
             verbose = 2
-        dictresult, status, reason = server.get(self.uri, data = { 'workflow' : self.cachedinfo['RequestName'], 'verbose': verbose })
+        dictresult, status, reason = server.get(self.uri, data = { 'workflow' : self.requestname, 'verbose': verbose })
         dictresult = dictresult['result'][0] #take just the significant part
 
         if status != 200:
-            msg = "Problem retrieving status:\ninput:%s\noutput:%s\nreason:%s" % (str(self.cachedinfo['RequestName']), str(dictresult), str(reason))
+            msg = "Problem retrieving status:\ninput:%s\noutput:%s\nreason:%s" % (str(self.requestname), str(dictresult), str(reason))
             raise RESTCommunicationException(msg)
 
         self.printShort(dictresult)
@@ -89,7 +89,7 @@ class status(SubCommand):
 
         self.logger.debug(dictresult) #should be something like {u'result': [[123, u'ciao'], [456, u'ciao']]}
 
-        self.logger.info("Task name:\t\t\t%s" % self.cachedinfo['RequestName'])
+        self.logger.info("Task name:\t\t\t%s" % self.requestname)
         self.logger.info("Task status:\t\t\t%s" % dictresult['status'])
 
         def logJDefErr(jdef):
@@ -105,7 +105,7 @@ class status(SubCommand):
             self.logger.error("%sError during task injection:%s\t%s" % (colors.RED,colors.NORMAL,dictresult['taskFailureMsg']))
             # We might also have more information in the job def errors
             logJDefErr(jdef=dictresult)
-        elif self.cachedinfo['RequestName'] == dictresult['jobSetID']:
+        elif self.requestname == dictresult['jobSetID']:
             # CRAB3-HTCondor
             taskname = urllib.quote(dictresult['jobSetID'])
             self.logger.info("Glidemon monitoring URL:\t\thttp://glidemon.web.cern.ch/glidemon/jobs.php?taskname=%s" % taskname)
@@ -309,7 +309,7 @@ class status(SubCommand):
                     for task, task_info in user_info.get("tasks", {}).items():
                         if 'Priority' not in task_info:
                             continue
-                        if task != self.cachedinfo['RequestName']:
+                        if task != self.requestname:
                             continue
                         task_prio = task_info['Priority']
                         break

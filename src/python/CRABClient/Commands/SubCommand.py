@@ -135,6 +135,8 @@ class SubCommand(ConfigCommand):
         self.logfile = ''
         self.logger.debug("Executing command: '%s'" % str(self.name))
         self.proxy = None
+        self.voRole = None
+        self.voGroup = None
 
         ##Get the mapping
         self.loadMapping()
@@ -167,9 +169,10 @@ class SubCommand(ConfigCommand):
 
 
         ##if we get an input task we load the cache and set the url from it
-
         if hasattr(self.options, 'task') and self.options.task:
             self.loadLocalCache()
+        if hasattr(self.options, 'uniquetask') and self.options.uniquetask:
+            self.requestname = self.options.uniquetask
 
         ## if the server url isn't already set we check the args and then the config
         if not hasattr(self, 'serverurl') and self.requiresREST:
@@ -243,7 +246,7 @@ class SubCommand(ConfigCommand):
                 raise Exception
 
         #for client that does not use --server option or --instance option
-        elif hasattr(self.configuration.General, 'instance'):
+        elif hasattr(self, 'configuration') and hasattr(self.configuration.General, 'instance'):
             instance=self.configuration.General.instance
 
             #checking if instance given is vaild
@@ -381,6 +384,10 @@ class SubCommand(ConfigCommand):
                                      dest = "task",
                                      default = None,
                                      help = "Same as -c/-continue" )
+            self.parser.add_option( "--uniquetask",
+                                     dest = "uniquetask",
+                                     default = None,
+                                     help = "Run without using the local task directory but directly contacting the server" )
 
         self.parser.add_option( "-r", "--voRole",
                                 dest = "voRole",
@@ -390,7 +397,6 @@ class SubCommand(ConfigCommand):
                                 dest = "voGroup",
                                 default = '' )
         if self.requiresREST:
-
             self.parser.add_option("--instance",
                                    dest = "instance",
                                    type = "string",
@@ -418,13 +424,11 @@ class SubCommand(ConfigCommand):
             self.options.config = self.args[0]
             del self.args[:]
 
-        if self.requiresTaskOption and not self.options.task:
+        if self.requiresTaskOption and not (self.options.task or self.options.uniquetask):
             if len(self.args) == 1 and self.args[0]:
                 self.options.task = self.args[0]
-
             elif self.name != "kill" and self.crab3dic["taskname"] != None:
                 self.options.task = self.crab3dic["taskname"]
-
             else:
                 raise MissingOptionException('ERROR: Task option is required')
 

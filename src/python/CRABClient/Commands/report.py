@@ -20,13 +20,13 @@ class report(SubCommand):
     def __call__(self):
         server = HTTPRequests(self.serverurl, self.proxyfilename, self.proxyfilename, version=__version__)
 
-        self.logger.debug('Looking up report for task %s' % self.cachedinfo['RequestName'])
-        dictresult, status, reason = server.get(self.uri, data = {'workflow': self.cachedinfo['RequestName'], 'subresource': 'report'})
+        self.logger.debug('Looking up report for task %s' % self.requestname)
+        dictresult, status, reason = server.get(self.uri, data = {'workflow': self.requestname, 'subresource': 'report'})
 
         self.logger.debug("Result: %s" % dictresult)
 
         if status != 200:
-            msg = "Problem retrieving report:\ninput:%s\noutput:%s\nreason:%s" % (str(self.cachedinfo['RequestName']), str(dictresult), str(reason))
+            msg = "Problem retrieving report:\ninput:%s\noutput:%s\nreason:%s" % (str(self.requestname), str(dictresult), str(reason))
             raise RESTCommunicationException(msg)
         if not dictresult['result'][0]['runsAndLumis'] :
             self.logger.info('No jobs finished yet. Report is available when jobs complete')
