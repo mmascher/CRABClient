@@ -67,8 +67,10 @@ class purge(SubCommand):
 
             if ufcresult == '' :
                 self.logger.info('%sSuccess%s: Successfully remove file from cache' % (colors.GREEN, colors.NORMAL))
+                cacheresult = 'SUCCESS'
             else:
                 self.logger.info('%sError%s: Failed to remove the file from cache' % (colors.RED, colors.NORMAL))
+                cacheresult = 'FAILED'
 
         if not self.options.cacheonly:
             self.logger.info('Getting the schedd address')
@@ -91,9 +93,16 @@ class purge(SubCommand):
 
             if exitcode == 0 :
                 self.logger.info('%sSuccess%s: Successfully remove task from scehdd' % (colors.GREEN, colors.NORMAL))
+                sceddresult = 'SUCCESS'
+                gsisshdict = {}
             else :
                 self.logger.info('%sError%s: Failed to remove task from schedd' % (colors.RED, colors.NORMAL))
+                sceddaddress = 'FAILED'
                 self.logger.debug('gsissh stdout: %s\ngsissh stderr: %s\ngsissh exitcode: %s' % (stdout,stderr,exitcode))
+                gsisshdict = {'stdout' : stdout, 'stderr' : stderr , 'exitcode' : exitcode}
+
+            if hasattr(self, 'fromapi') and self.fromapi : return {'cacheresult' : cacheresult , 'sceddresult' : sceddresult , 'gsiresult' : gsisshdict}
+
 
     def setOptions(self):
         """

@@ -27,7 +27,12 @@ class kill(SubCommand):
 
         self.logger.info("Kill request successfully sent")
         if dictresult['result'][0]['result'] != 'ok':
+            resultdict = {'status' : 'FAILED'}
             self.logger.info(dictresult['result'][0]['result'])
+        else:
+            resultdict = {'status' : 'SUCCESS'}
+
+        if hasattr(self, 'fromapi') and self.fromapi : return resultdict
 
 
     def setOptions(self):

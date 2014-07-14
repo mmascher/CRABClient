@@ -14,7 +14,7 @@ class getoutput(getcommand):
     visible = True #overwrite getcommand
 
     def __call__(self):
-        getcommand.__call__(self, subresource = 'data')
+        return getcommand.__call__(self, subresource = 'data')
 
     def setOptions(self):
         """

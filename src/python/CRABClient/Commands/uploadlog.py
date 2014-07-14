@@ -41,6 +41,10 @@ class uploadlog(SubCommand):
         logfileurl = cacheurl + '/logfile?name='+str(logfilename)
         self.logger.info("Log file url: %s" %logfileurl)
 
+        if hasattr(self , 'fromapi') and self.fromapi:
+
+            return {'result' : {'status' : 'SUCCESS' , 'logurl' : logfileurl}}
+
     def setOptions(self):
         """
         __setOptions__

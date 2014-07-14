@@ -10,6 +10,7 @@ from RESTInteractions import HTTPRequests
 
 import os
 import re
+import copy
 
 class getcommand(SubCommand):
     """ Retrieve the output files of a number of jobs specified by the -q/--quantity option. The task
@@ -72,16 +73,35 @@ class getcommand(SubCommand):
                 self.logger.debug("XRootD url is requested")
                 for fileinfo in workflow:
                     self.logger.info("root://cms-xrd-global.cern.ch/%s" % fileinfo['lfn'])
+
+                if hasattr(self, 'fromapi') and self.fromapi:
+
+                    xrootlfn = ["root://cms-xrd-global.cern.ch/%s" % link['lfn'] for link in workflow]
+                    returndict = {'xrootd' : xrootlfn}
+
             elif self.dump:
                 for fileInfo in workflow:
                     self.logger.info(fileInfo['pfn'])
+
+                if hasattr(self, 'fromapi') and self.fromapi:
+
+                    pfnlist =[]
+                    for pfn in workflow : pfnlist.append(pfn['pfn'])
+                    returndict = {'pfn' :pfnlist}
+
             else:
                 self.logger.info("Retrieving %s files" % totalfiles )
                 copyoutput = remote_copy( self.logger, arglist )
-                copyoutput()
+                _ , successdict, faileddict = copyoutput()
+
+                returndict = {'success' : copy.deepcopy(successdict) , 'failed' : copy.deepcopy(faileddict)}
+
 
         if totalfiles == 0:
             self.logger.info("No files to retrieve")
+            returndict = {'success' : {} , 'failed' : {}}
+
+        if hasattr(self , 'fromapi') and self.fromapi: return returndict
 
 
     def processServerResult(self, result):

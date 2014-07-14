@@ -151,10 +151,7 @@ class remote_copy(SubCommand):
             self.logger.info("%sSuccess%s: All files successfully retrieve " % (colors.GREEN,colors.NORMAL))
             globalExitcode=0
 
-
-
-
-        return CommandResult(globalExitcode, '')
+        return CommandResult(globalExitcode, ''), successfiles , failedfiles
 
     def startchildproc(self, childprocess, nsubprocess, successfiles, failedfiles):
         """
