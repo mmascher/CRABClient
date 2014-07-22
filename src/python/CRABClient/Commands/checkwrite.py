@@ -79,7 +79,7 @@ class checkwrite(SubCommand):
             if stop or use_new_file:
                 self.removeFile()
         self.logger.info('%sNOTE%s: you cannot write to a site if you did not ask permission' % (colors.BOLD, colors.NORMAL))
-        if hasattr(self, 'fromapi') and self.fromapi : return returndict
+        return returndict
 
 
     def createFile(self):

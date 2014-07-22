@@ -32,7 +32,7 @@ class kill(SubCommand):
         else:
             resultdict = {'status' : 'SUCCESS'}
 
-        if hasattr(self, 'fromapi') and self.fromapi : return resultdict
+        return resultdict
 
 
     def setOptions(self):

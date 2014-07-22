@@ -43,7 +43,7 @@ class remake(SubCommand):
         else:
             status = 'PARTIAL SUCCESS'
 
-        if hasattr(self, 'fromapi') and self.fromapi : return {'status' : status , 'result' : {'remaked': remakedtask , 'rejected' : self.rejectedtask}}
+        return {'status' : status , 'result' : {'remaked': remakedtask , 'rejected' : self.rejectedtask}}
 
     def remakecache(self,taskname):
         #checking and making the request area if does not exist

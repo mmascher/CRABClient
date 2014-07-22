@@ -76,15 +76,15 @@ class purge(SubCommand):
             self.logger.info('Getting the schedd address')
             baseurl=self.getUrl(self.instance, resource='info')
             try:
-                sceddaddress = server_info('scheddaddress', self.serverurl, self.proxyfilename, baseurl, workflow = self.cachedinfo['RequestName'] )
+                scheddaddress = server_info('scheddaddress', self.serverurl, self.proxyfilename, baseurl, workflow = self.cachedinfo['RequestName'] )
             except HTTPException, he:
                 self.logger.info('%sError%s: Failed to get the schedd address' % (colors.RED, colors.NORMAL))
                 raise HTTPException,he
             self.logger.debug('%sSuccess%s: Successfully getting schedd address' % (colors.GREEN, colors.NORMAL))
-            self.logger.debug('Schedd address: %s' % sceddaddress)
+            self.logger.debug('Schedd address: %s' % scheddaddress)
             self.logger.info('Attempting to clean user file schedd')
 
-            gssishrm = 'gsissh -o ConnectTimeout=60 -o PasswordAuthentication=no ' + sceddaddress + ' rm -rf ' + self.cachedinfo['RequestName']
+            gssishrm = 'gsissh -o ConnectTimeout=60 -o PasswordAuthentication=no ' + scheddaddress + ' rm -rf ' + self.cachedinfo['RequestName']
             self.logger.debug('gsissh command: %s' % gssishrm)
 
             delprocess=subprocess.Popen(gssishrm, stdout= subprocess.PIPE, stderr= subprocess.PIPE, shell=True)
@@ -93,15 +93,15 @@ class purge(SubCommand):
 
             if exitcode == 0 :
                 self.logger.info('%sSuccess%s: Successfully remove task from scehdd' % (colors.GREEN, colors.NORMAL))
-                sceddresult = 'SUCCESS'
+                scheddresult = 'SUCCESS'
                 gsisshdict = {}
             else :
                 self.logger.info('%sError%s: Failed to remove task from schedd' % (colors.RED, colors.NORMAL))
-                sceddaddress = 'FAILED'
+                scheddaddress = 'FAILED'
                 self.logger.debug('gsissh stdout: %s\ngsissh stderr: %s\ngsissh exitcode: %s' % (stdout,stderr,exitcode))
                 gsisshdict = {'stdout' : stdout, 'stderr' : stderr , 'exitcode' : exitcode}
 
-            if hasattr(self, 'fromapi') and self.fromapi : return {'cacheresult' : cacheresult , 'sceddresult' : sceddresult , 'gsiresult' : gsisshdict}
+            return {'cacheresult' : cacheresult , 'scheddresult' : scheddresult , 'gsiresult' : gsisshdict}
 
 
     def setOptions(self):

@@ -211,9 +211,7 @@ class submit(SubCommand):
         ## If can not find a configuration file candidate, use the default 'crabConfig.py'.
         ## If find more than one candidate, raise ConfigurationException.
 
-        if isinstance(self.options.config, Configuration ):
-            pass
-        elif self.options.config is None:
+        if self.options.config is None:
             use_default = True
             if len(self.args):
                 config_candidates = [(arg,i) for i,arg in enumerate(self.args) if '=' not in arg and arg[-3:] == '.py']
