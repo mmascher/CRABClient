@@ -142,7 +142,6 @@ class submit(SubCommand):
         else:
             configreq['publishname'] = "%s-%s" %(configreq['publishname'], isbchecksum)
         configreq.update(jobconfig)
-
         server = serverFactory(self.serverurl, self.proxyfilename, self.proxyfilename, version=__version__)
 
         self.logger.info("Sending the request to the server")

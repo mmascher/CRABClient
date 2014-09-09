@@ -23,11 +23,43 @@ def cmdexec(command, *args, **kwargs):
 
     try:
         cmdobj = getattr(mod, command)(logger , cmdarg)
-        cmdobj.fromapi = True
         res = cmdobj()
     except SystemExit, se:
         #most likely an error from the OptionParser in Subcommand. Can't avoid a sys.exit from there but can capture it so we don't exit in a bad way
         if se.code==2:
             raise Exception("Captured a system exit. Probably caused by a wrong option passed to the command.")
 
+    return res
 
+
+class Task(object):
+    """
+        Task - Wraps methods and attributes for a single analysis task
+    """
+    def __init__(self):
+        self.config = Configuration()
+#        self.apiLog, self.clientLog, self.tracebackLog = \
+#                CRABAPI.TopLevel.getAllLoggers()
+
+    def submit(self):
+        """
+            submit - Sends the current task to the server. Returns requestID
+        """
+        args = [ '--skip-proxy','unittest-noproxy' ]
+        res = cmdexec('submit', config=self.config)
+        return res
+
+    def kill(self):
+        """
+            kill - Tells the server to cancel the current task
+        """
+        raise NotImplementedError
+
+    def __getattr__(self, name):
+        """
+            __getattr__ - expose certain values as attributes
+        """
+        if name == 'jobs':
+            raise NotImplementedError
+        else:
+            raise AttributeError
