@@ -37,10 +37,11 @@ class remake(SubCommand):
                 self.logger.info('%sWarning%s: Failed to make a requestare' % (colors.RED, colors.NORMAL))
 
             self.logger.info('Remaking the .requestcache for %s' % taskname)
-            jsonfile = {'voGroup': '', 'Server': self.serverurl , 'instance': self.instance,'RequestName': taskname, 'voRole': '', 'Port': ''}, open(cachepath , 'w')
-            pickle.dump(jsonfile)
+            dumpfile = open(cachepath , 'w')
+            pickle.dump({'voGroup': '', 'Server': self.serverurl , 'instance': self.instance,'RequestName': taskname, 'voRole': '', 'Port': ''}, dumpfile)
+            dumpfile.close()
             self.logger.info('%sSuccess%s: Finish making %s ' % (colors.GREEN, colors.NORMAL, cachepath))
-            return jsonfile
+            return 0 
 
     def setOptions(self):
         """

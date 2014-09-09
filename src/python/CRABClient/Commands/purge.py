@@ -84,7 +84,7 @@ class purge(SubCommand):
                 self.logger.info('%sError%s: Failed to get schedd address' % (colors.RED, colors.NORMAL))
                 raise HTTPException,he
             self.logger.debug('%sSuccess%s: Successfully got schedd address' % (colors.GREEN, colors.NORMAL))
-            self.logger.debug('Schedd address: %s' % sceddaddress)
+            self.logger.debug('Schedd address: %s' % scheddaddress)
             self.logger.info('Attempting to remove task from schedd')
 
             gssishrm = 'gsissh -o ConnectTimeout=60 -o PasswordAuthentication=no ' + scheddaddress + ' rm -rf ' + self.cachedinfo['RequestName']
