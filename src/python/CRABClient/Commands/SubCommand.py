@@ -6,16 +6,16 @@ import types
 from ast import literal_eval
 from optparse import OptionParser
 
-from CRABClient.ClientUtilities import loadCache, getWorkArea, server_info, createWorkArea
-from CRABClient.ClientUtilities import BASEURL, SERVICE_INSTANCES
-from CRABClient import SpellChecker
 import CRABClient.Emulator
-from CRABClient.ClientExceptions import ConfigurationException, MissingOptionException, EnvironmentException, UnknownOptionException
-from CRABClient.ClientMapping import renamedParams, commandsConfiguration, configParametersInfo, getParamDefaultValue
-from CRABClient.CredentialInteractions import CredentialInteractions
+from CRABClient import SpellChecker
 from CRABClient.__init__ import __version__
 from CRABClient.ClientUtilities import colors
 from CRABClient.CRABOptParser import CRABCmdOptParser
+from CRABClient.ClientUtilities import BASEURL, SERVICE_INSTANCES
+from CRABClient.CredentialInteractions import CredentialInteractions
+from CRABClient.ClientUtilities import loadCache, getWorkArea, server_info, createWorkArea
+from CRABClient.ClientMapping import renamedParams, commandsConfiguration, configParametersInfo, getParamDefaultValue
+from CRABClient.ClientExceptions import ConfigurationException, MissingOptionException, EnvironmentException, UnknownOptionException
 
 from WMCore.Credential.Proxy import Proxy
 from WMCore.Configuration import loadConfigurationFile, Configuration
