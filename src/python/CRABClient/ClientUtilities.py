@@ -175,6 +175,11 @@ def removeLoggerHandlers(logger):
         logger.removeHandler(h)
 
 
+def getColumn(dictresult, columnName):
+    columnIndex = dictresult['desc']['columns'].index(columnName)
+    value = dictresult['result'][columnIndex]
+    return value
+
 def getUrl(instance='prod', resource='workflow'):
     """
     Retrieve the url depending on the resource we are accessing and the instance.

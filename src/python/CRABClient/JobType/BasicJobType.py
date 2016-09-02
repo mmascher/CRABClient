@@ -18,8 +18,8 @@ class BasicJobType(object):
     TODO: thinking on having a job type help here...
     """
 
-    def __init__(self, config, logger, workingdir):
-        self.logger = logger
+    def __init__(self, config, proxyfilename, logger, workingdir):
+        self.logger, self.proxyfilename = logger, proxyfilename
         ## Before everything, check if the config is ok.
         if config:
             valid, msg = self.validateConfig(config)

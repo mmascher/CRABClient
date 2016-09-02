@@ -100,7 +100,7 @@ class submit(SubCommand):
         serverBackendURLs = server_info('backendurls', self.serverurl, self.proxyfilename, getUrl(self.instance, resource='info'))
         #if cacheSSL is specified in the server external configuration we will use it to upload the sandbox
         filecacheurl = serverBackendURLs['cacheSSL'] if 'cacheSSL' in serverBackendURLs else None
-        pluginParams = [self.configuration, self.logger, os.path.join(self.requestarea, 'inputs')]
+        pluginParams = [self.configuration, self.proxyfilename, self.logger, os.path.join(self.requestarea, 'inputs')]
         crab_job_types = getJobTypes()
         if upper(self.configreq['jobtype']) in crab_job_types:
             plugjobtype = crab_job_types[upper(self.configreq['jobtype'])](*pluginParams)
@@ -218,7 +218,7 @@ class submit(SubCommand):
         ## Load the external plugin or check that the crab plugin is valid.
         external_plugin_name = getattr(self.configuration.JobType, 'externalPluginFile', None)
         crab_plugin_name = getattr(self.configuration.JobType, 'pluginName', None)
-        crab_job_types = {'ANALYSIS': None, 'PRIVATEMC': None} #getJobTypes()
+        crab_job_types = {'ANALYSIS': None, 'PRIVATEMC': None, 'COPYCAT': None} #getJobTypes()
         if external_plugin_name:
             addPlugin(external_plugin_name) # Do we need to do this here?
         if crab_plugin_name:
