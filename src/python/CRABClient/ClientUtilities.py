@@ -178,7 +178,10 @@ def removeLoggerHandlers(logger):
 def getColumn(dictresult, columnName):
     columnIndex = dictresult['desc']['columns'].index(columnName)
     value = dictresult['result'][columnIndex]
-    return value
+    if value=='None':
+        return None
+    else:
+        return value
 
 def getUrl(instance='prod', resource='workflow'):
     """

@@ -6,7 +6,7 @@ import json
 import urllib
 from ast import literal_eval
 
-from ServerUtilities import TASKDBSTATUSES_TMP
+from ServerUtilities import TASKDBSTATUSES_TMP, TASKDBSTATUSES_FAILURES
 
 import CRABClient.Emulator
 from CRABClient import __version__
@@ -77,7 +77,7 @@ class status2(SubCommand):
                 # Skip first line of the file (it contains info for the caching script) and load job_report summary
                 fd.readline()
                 statusCacheInfo = literal_eval(fd.readline())
-            self.logger.debug("Got information from status cache file: %s", statusCacheInfo)
+            self.logger.debug("Got information from status cache. Copy of the cache is %s", statusCacheFilename)
 
         self.printDAGStatus(crabDBInfo, statusCacheInfo)
 
@@ -121,7 +121,7 @@ class status2(SubCommand):
         dag_status = dagman_codes.get(statusCacheInfo['DagStatus']['DagStatus'])
         #Unfortunately DAG code for killed task is 6, just as like for finished DAGs with failed jobs
         #Relabeling the status from 'FAILED' to 'FAILED (KILLED)'     if a successful kill command was issued
-        dbstatus = self.getColumn(crabDBInfo, 'tm_task_status')
+        dbstatus = getColumn(crabDBInfo, 'tm_task_status')
         if dag_status=='FAILED' and dbstatus=='KILLED':
             dag_status = 'FAILED (KILLED)'
 
@@ -167,7 +167,7 @@ class status2(SubCommand):
         if warnings:
             for warningMsg in warnings:
                 self.logger.warning("%sWarning%s:\t\t\t%s" % (colors.RED, colors.NORMAL, warningMsg))
-        if failure: #TODO failure should be ignored if the task is not in failure state in the task db
+        if failure and status in TASKDBSTATUSES_FAILURES:
             msg  = "%sFailure message from the server%s:" % (colors.RED, colors.NORMAL)
             msg += "\t\t%s" % (failure.replace('\n', '\n\t\t\t\t'))
             self.logger.error(msg)

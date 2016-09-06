@@ -48,8 +48,9 @@ class CopyCat(BasicJobType):
         server = serverFactory(serverhost, self.proxyfilename, self.proxyfilename, version=__version__)
         uri = getUrl(self.config.JobType.copyCatInstance, resource='task')
         dictresult, dummyStatus, dummyReason = server.get(uri, data=inputlist)
-
         webdir = getProxiedWebDir(self.config.JobType.copyCatTaskname, serverhost, uri, self.proxyfilename, self.logger.debug)
+        if not webdir:
+            webdir = getColumn(dictresult, 'tm_user_webdir')
 
         return dictresult, webdir
 
@@ -68,8 +69,6 @@ class CopyCat(BasicJobType):
         jobsw = getColumn(taskDict, 'tm_job_sw')
 
         sandboxFilename = os.path.join(self.workdir, 'sandbox.tar.gz')
-        import pdb
-        pdb.set_trace()
         getFileFromURL(webdir + '/sandbox.tar.gz', sandboxFilename, self.proxyfilename)
 
         configArguments = {'addoutputfiles' : addoutputfiles,
