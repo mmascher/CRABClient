@@ -195,13 +195,6 @@ class CopyCat(BasicJobType):
             msg += "\nSuggestion: Set Data.splitting = 'FileBased'."
             return False, msg
 
-        ## Make sure the splitting algorithm is valid.
-        allowedSplitAlgos = ['Automatic', 'FileBased', 'LumiBased', 'EventAwareLumiBased']
-        if self.splitAlgo not in allowedSplitAlgos:
-            msg  = "Invalid CRAB configuration: Parameter Data.splitting has an invalid value ('%s')." % (self.splitAlgo)
-            msg += "\nAnalysis job type only supports the following splitting algorithms: %s." % (allowedSplitAlgos)
-            return False, msg
-
         return True, "Valid configuration"
 
 
@@ -211,13 +204,5 @@ class CopyCat(BasicJobType):
         required values are there and optional values don't conflict.
         """
 
-        self.splitAlgo = getattr(config.Data, 'splitting', None)
-        if not self.splitAlgo:
-            msg = "Invalid CRAB configuration: Parameter Data.splitting not specified."
-            return False, msg
-
-        if not getattr(config.JobType, 'psetName', None):
-            msg = "Invalid CRAB configuration: Parameter JobType.psetName not specified."
-            return False, msg
 
         return True, "Valid configuration"
