@@ -1,3 +1,6 @@
+from __future__ import print_function
+from __future__ import division
+
 import CRABClient.Emulator
 from CRABClient import __version__
 from CRABClient.ClientUtilities import colors
@@ -6,10 +9,18 @@ from CRABClient.Commands.getcommand import getcommand
 from CRABClient.ClientExceptions import RESTCommunicationException, ClientException, MissingOptionException
 
 from ServerUtilities import getProxiedWebDir
+from httplib import HTTPException
 
 
 class getlog(getcommand):
     """
+    Important: code here is identical to the old getlog implementation (aside from setting the subresource to
+    'logs2' when calling getcommand and the names of the command/class themselves). This was done because trying to
+    avoid copy-paste code isn't worth the effort in this case. When the status2 is working correctly, old code will
+    be easily removed and replaced with the 'getlog2' version. Also, the command 'getlog' itself is deprecated and
+    we don't expect to make any changes to it until it's removed.
+
+    Class description:
     Retrieve the log files of a number of jobs specified by the -q/--quantity option.
     -q logfiles per exit code are returned if transferLogs = False; otherwise all the log files
     collected by the LogCollect job are returned. The task is identified by the -d/--dir option.
@@ -43,7 +54,8 @@ class getlog(getcommand):
                 self.logger.info("%sSuccess%s: All files successfully retrieved." % (colors.GREEN,colors.NORMAL))
             returndict = {'success': success, 'failed': failed}
         else:
-            returndict = getcommand.__call__(self, subresource = 'logs')
+            # Different from the old getlog code: set 'logs2' as subresource so that 'getcommand' uses the new logic.
+            returndict = getcommand.__call__(self, subresource = 'logs2')
             if ('success' in returndict and not returndict['success']) or \
                ('failed'  in returndict and returndict['failed']):
                 msg = "You can use the --short option to retrieve a short version of the log files from the Grid scheduler."
@@ -91,9 +103,9 @@ class getlog(getcommand):
         success = []
         failed = []
         for _, jobid in self.options.jobids:
-            ## We don't know a priori how many retries the job had. So we start with retry 0
-            ## and increase it by 1 until we are unable to retrieve a log file (interpreting
-            ## this as the fact that we reached the highest retry already).
+            # We don't know a priori how many retries the job had. So we start with retry 0
+            # and increase it by 1 until we are unable to retrieve a log file (interpreting
+            # this as the fact that we reached the highest retry already).
             retry = 0
             succeded = True
             while succeded:
@@ -104,13 +116,13 @@ class getlog(getcommand):
                     self.logger.info('Retrieved %s' % (filename))
                     success.append(filename)
                     retry += 1 #To retrieve retried job log, if there is any.
-                except ClientException as ex:
+                except HTTPException as hte:
                     succeded = False
-                    ## Ignore the exception if the HTTP status code is 404. Status 404 means file
-                    ## not found (see http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html). File
-                    ## not found error is expected, since we try all the job retries.
-                    if not hasattr(ex, "status") or ex.status!=404:
-                        self.logger.debug(str(ex))
+                    # Ignore the exception if the HTTP status code is 404. Status 404 means file
+                    # not found (see http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html). File
+                    # not found error is expected, since we try all the job retries.
+                    if hasattr(hte.args[0], 'status') and hte.args[0].status != 404:
+                        self.logger.debug(str(hte))
                         failed.append(filename)
 
         return failed, success
