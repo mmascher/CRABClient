@@ -333,7 +333,7 @@ class submit(SubCommand):
             os.chdir(tmpDir)
             self.logger.info('Creating temporary directory for dry run sandbox in %s' % tmpDir)
             ufc.downloadLog('dry-run-sandbox.tar.gz', output=os.path.join(tmpDir, 'dry-run-sandbox.tar.gz'))
-            for name in ['dry-run-sandbox.tar.gz', 'CMSRunAnalysis.tar.gz', 'sandbox.tar.gz']:
+            for name in ['dry-run-sandbox.tar.gz', 'InputFiles.tar.gz', 'CMSRunAnalysis.tar.gz', 'sandbox.tar.gz']:
                 tf = tarfile.open(os.path.join(tmpDir, name))
                 tf.extractall(tmpDir)
                 tf.close()

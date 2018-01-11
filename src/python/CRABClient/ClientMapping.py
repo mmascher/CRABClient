@@ -143,7 +143,8 @@ commandsConfiguration = {
     'status'        : {'acceptsArguments': False, 'requiresREST': True,  'initializeProxy': True,  'requiresDirOption': True,  'useCache': True,  'requiresProxyVOOptions': False, 'doProxyGroupRoleCheck': False, 'requiresLocalCache': True },
     'submit'        : {'acceptsArguments': True,  'requiresREST': True,  'initializeProxy': True,  'requiresDirOption': False, 'useCache': False, 'requiresProxyVOOptions': False, 'doProxyGroupRoleCheck': True , 'requiresLocalCache': False},
     'tasks'         : {'acceptsArguments': False, 'requiresREST': True,  'initializeProxy': True,  'requiresDirOption': False, 'useCache': False, 'requiresProxyVOOptions': False, 'doProxyGroupRoleCheck': False, 'requiresLocalCache': False},
-    'uploadlog'     : {'acceptsArguments': False, 'requiresREST': True,  'initializeProxy': True,  'requiresDirOption': True,  'useCache': True,  'requiresProxyVOOptions': False, 'doProxyGroupRoleCheck': False, 'requiresLocalCache': False}
+    'uploadlog'     : {'acceptsArguments': False, 'requiresREST': True,  'initializeProxy': True,  'requiresDirOption': True,  'useCache': True,  'requiresProxyVOOptions': False, 'doProxyGroupRoleCheck': False, 'requiresLocalCache': False},
+    'preparelocal'    : {'acceptsArguments': False, 'requiresREST': True,  'initializeProxy': True,  'requiresDirOption': True, 'useCache': True, 'requiresProxyVOOptions': False, 'doProxyGroupRoleCheck': False, 'requiresLocalCache': True},
 }
 
 

@@ -62,7 +62,7 @@ class CopyCat(BasicJobType):
 
         taskDict, webdir = self.getTaskDict()
         addoutputfiles = literal_eval(getColumn(taskDict, 'tm_outfiles'))
-        adduserfiles = literal_eval(getColumn(taskDict, 'tm_user_files'))
+#        adduserfiles = literal_eval(getColumn(taskDict, 'tm_user_files'))
         tfileoutfiles = literal_eval(getColumn(taskDict, 'tm_tfile_outfiles'))
         edmoutfiles = literal_eval(getColumn(taskDict, 'tm_edm_outfiles'))
         jobarch = getColumn(taskDict, 'tm_job_arch')
@@ -72,7 +72,7 @@ class CopyCat(BasicJobType):
         getFileFromURL(webdir + '/sandbox.tar.gz', sandboxFilename, self.proxyfilename)
 
         configArguments = {'addoutputfiles' : addoutputfiles,
-                           'adduserfiles' : adduserfiles,
+#                           'adduserfiles' : adduserfiles,
                            'tfileoutfiles' : tfileoutfiles,
                            'edmoutfiles' : edmoutfiles,
                            'jobarch' : jobarch,
